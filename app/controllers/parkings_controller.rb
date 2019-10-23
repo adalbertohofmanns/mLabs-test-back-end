@@ -18,7 +18,7 @@ class ParkingsController < ApplicationController
     @parking = Parking.new(parking_params)
 
     if @parking.save
-      render json: @parking, status: :created, location: @parking
+      render json: {reserva: @parking.id}, status: :created, location: @parking
     else
       render json: @parking.errors, status: :unprocessable_entity
     end
