@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
-  resources :parkings
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :parkings do
+    member do 
+      put :out
+      put :pay
+    end
+  end
 end
