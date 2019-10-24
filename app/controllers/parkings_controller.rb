@@ -10,7 +10,7 @@ class ParkingsController < ApplicationController
 
   # GET /parkings/1
   def show
-    render json: @parking
+    render json: @parking.plate_show
   end
 
   # POST /parkings
@@ -35,7 +35,7 @@ class ParkingsController < ApplicationController
 
   # PUT /parkings/1/out
   def out
-    out = Parking.find(params[:id])
+    out = set_parking()
     if out.paid == true
       out.update_attributes!(left: true)
       out.update_attributes!(time: time_diff(Time.now, out.created_at) )
@@ -47,9 +47,16 @@ class ParkingsController < ApplicationController
 
   #PUT /parking/1/pay
   def pay
-    pay = Parking.find(params[:id])
+    pay = set_parking()
     pay.update_attributes!(paid: true)
     render json: pay.plate_show
+  end
+
+  # GET /historic/FAA-1234
+  def historic
+    plate_param = params[:plate]
+    plate = Parking.where(plate: plate_param.to_s)
+    render json: plate
   end
 
   # DELETE /parkings/1

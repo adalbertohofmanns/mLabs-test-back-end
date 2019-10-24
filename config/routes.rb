@@ -5,4 +5,5 @@ Rails.application.routes.draw do
       put :pay
     end
   end
+  get '/historic/:plate', to: "parkings#historic"
 end
