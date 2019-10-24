@@ -5,12 +5,12 @@ class ParkingsController < ApplicationController
   def index
     @parkings = Parking.all
 
-    render json: @parkings
+    render json: @parkings, status: :ok
   end
 
   # GET /parkings/1
   def show
-    render json: @parking.plate_show
+    render json: @parking.plate_show, status: :ok
   end
 
   # POST /parkings
@@ -27,7 +27,7 @@ class ParkingsController < ApplicationController
   # PATCH/PUT /parkings/1
   def update
     if @parking.update(parking_params)
-      render json: @parking
+      render json: @parking, status: :ok
     else
       render json: @parking.errors, status: :unprocessable_entity
     end
@@ -39,9 +39,9 @@ class ParkingsController < ApplicationController
     if out.paid == true
       out.update_attributes!(left: true)
       out.update_attributes!(time: time_diff(Time.now, out.created_at) )
-      render json: out.plate_show
+      render json: out.plate_show, status: :ok
     else
-      render json: {status: "Placa sem pagamento efetuado"}
+      render json: {paid_status: "Placa sem pagamento efetuado"}, status: :payment_required
     end
   end
 
@@ -49,14 +49,14 @@ class ParkingsController < ApplicationController
   def pay
     pay = set_parking()
     pay.update_attributes!(paid: true)
-    render json: pay.plate_show
+    render json: pay.plate_show, status: :ok
   end
 
   # GET /historic/FAA-1234
   def historic
     plate_param = params[:plate]
     plate = Parking.where(plate: plate_param.to_s)
-    render json: plate
+    render json: plate, status: :ok
   end
 
   # DELETE /parkings/1
