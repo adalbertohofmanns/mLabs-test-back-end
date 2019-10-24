@@ -38,6 +38,10 @@ class ParkingsController < ApplicationController
     @parking.destroy
   end
 
+  def valid_plate?
+    
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_parking
