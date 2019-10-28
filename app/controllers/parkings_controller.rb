@@ -1,5 +1,5 @@
 class ParkingsController < ApplicationController
-  before_action :set_parking, only: [:show, :update, :destroy]
+  before_action :set_parking, only: [:show, :update, :destroy, :pay, :out]
 
   # GET /parkings
   def index
@@ -35,19 +35,18 @@ class ParkingsController < ApplicationController
 
   # PUT /parkings/1/out
   def out
-    out = set_parking()
+    out = @parking
     if out.paid == true
-      out.update_attributes!(left: true)
-      out.update_attributes!(time: time_diff(Time.now, out.created_at) )
+      out.update_attributes!(left: true, time: time_diff(Time.now, out.created_at))
       render json: out.plate_show, status: :ok
     else
-      render json: {paid_status: "Placa sem pagamento efetuado"}, status: :payment_required
+      render json: {paid_status: "Plate without payment"}, status: :payment_required
     end
   end
 
-  #PUT /parking/1/pay
+  #PUT /parkings/1/pay
   def pay
-    pay = set_parking()
+    pay = @parking
     pay.update_attributes!(paid: true)
     render json: pay.plate_show, status: :ok
   end
@@ -56,7 +55,7 @@ class ParkingsController < ApplicationController
   def historic
     plate_param = params[:plate]
     plate = Parking.where(plate: plate_param.to_s)
-    render json: plate, status: :ok
+    render json: plate.map { |p| p.slice(:id, :time, :paid, :left) }, status: :ok
   end
 
   # DELETE /parkings/1

@@ -2,12 +2,16 @@ version: '3'
 services:
   db:
     image: postgres
+    # volumes:
+    #   - ./tmp/db:/var/lib/postgresql/data
   web:
     build: .
-    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    command: bundle exec puma -C config/puma.rb -p 3000 -e production
     volumes:
       - .:/var/www
     ports:
       - 3000:3000
+    expose:
+      - 3000
     depends_on:
       - db

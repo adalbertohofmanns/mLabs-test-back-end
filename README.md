@@ -1,24 +1,18 @@
-# README
+### LINUX:
+    apt install docker
+    apt install docker-compose
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### TO RUN WITH DOCKER:
+    docker-compose build (this will build the application)
+    docker-compose up -d (this will execute application, -d run in background)
 
-Things you may want to cover:
+### TO CREATE AND MIGRATE DATABASE:
+    rails run:setup
 
-* Ruby version
+### TO DROP DATABASE:
+    __ first, stop the server (docker-compose down) __
+    then RUN
+    docker-compose run web bundle exec rake db:drop RAILS_ENV=production DISABLE_DATABASE_ENVIRONMENT_CHECK=1
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### TO STOP SERVER:
+    docker-compose down
